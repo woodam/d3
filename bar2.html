@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		* {padding:0; margin:0;}
+		
+		#myGraph {border:1px solid red; width:500px; height:240px;}
+		#myGraph .bar {stroke:rgb( 160, 0, 0 ); stroke-width:1px; fill:rgb(255, 0 ,0);}
+		.barNum {font-size:9px; text-anchor:middle;}
+
+	
+		
+	</style>
+</head>
+<body>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+
+	<svg id="myGraph"></svg>
+
+
+<script>
+//는 추가, 갱신한 곳
+var svgWidth = 320;	// SVG 요소의 넓이
+var svgHeight = 240;	// SVG 요소의 높이
+var barElements;	// 막대그래프의 막대 요소를 저장할 변수
+var dataSet = [120, 70, 175, 80, 220, 40, 180, 70, 90];
+var dataMax = 300;	// 데이터의 최댓값
+var barWidth = 20;	// 막대의 넓이
+var barMargin = 5;	// 막대의 옆 간격
+// 그래프 그리기
+barElements = d3.select("#myGraph")
+  .selectAll("rect")	// rect 요소를 지정
+  .data(dataSet)	// 데이터를 요소에 연결
+// 데이터 추가
+barElements.enter()	// 데이터 수만큼 반복
+  .append("rect")	// 데이터 수만큼 rect 요소가 추가됨
+  .attr("class", "bar")	// CSS 클래스 설정
+  .attr("height", 0)	// 초깃값을 0으로 설정●
+  .attr("width", barWidth)	// 넓이 지정
+  .attr("x", function(d, i){
+		return i * (barWidth+barMargin);		// X 좌표를 표시 순서×25+offsetX로 함 
+  })
+  .attr("y", svgHeight)	// 그래프 가장 아래에 좌표를 설정●
+	// 애니메이션 처리●　여기부터 barElements.enter() 전까지가 추가한 곳
+  .transition()
+  .duration(3000)	// 애니메이션 시간
+  .attr("y", function(d, i){	// Y 좌표를 지정
+		return svgHeight - d;	// Y 좌표를 계산
+  })
+  .attr("height", function(d,i){	// 넓이 설정. 2번째의 파라미터에 함수를 지정
+		return d;	// 데이터 값을 그대로 높이로 지정
+  })
+barElements.enter()	// text 요소 지정
+  .append("text")	// text 요소 추가
+  .attr("class", "barNum")	// CSS 클래스 설정
+  .attr("x", function(d, i){	// X 좌표를 지정
+		return i * (barWidth+barMargin) + 10;	// 막대그래프의 표시 간격을 맞춤
+  })
+  .attr("y", svgHeight - 5)	// Y 좌표를 지정
+  .text(function(d, i){	// 데이터 표시
+		return d;
+	})
+</script>
+</body>
+</html>
