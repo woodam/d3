@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		* {padding:0; margin:0;}
+		
+		#myGraph {border:1px solid red; width:500px;}
+		#myGraph .bar {stroke:rgb( 160, 0, 0 ); stroke-width:1px; fill:rgb(255, 0 ,0);}
+		.barNum {font-size:9px; text-anchor:middle;}
+
+	
+		
+	</style>
+</head>
+<body>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+
+	<svg id="myGraph"></svg>
+
+
+<script>
+	var dataSet = [300, 130, 5, 60, 240];
+	var obj = d3.select("#myGraph");
+
+	obj.selectAll("rect")
+	.data(dataSet)
+	.enter()
+	.append("rect")
+	.attr("class", "bar")
+	.attr("x", 0)
+	.attr("y", function(d,i){
+		return i * 25;
+	})
+	.attr("height", "20px")
+	.attr("width", 0)
+
+	.transition()
+	.ease("circle")
+	.delay(1000)
+	.attr("width", function(d,i){
+		return d + "px";
+	});
+
+
+	obj.selectAll("text")
+	.data(dataSet)
+	.enter()
+	.append("text")
+	.attr("class","barNum")
+	.attr("x","-200px")
+	.attr("y", function(d,i){
+		return i * 25 + 10;
+	})
+	.text(function(d,i){
+		return d+"%";
+	})
+
+	.transition()
+	.ease("circle")
+	.delay(1000)
+	.attr("x", function(d,i){
+		return d + "px";
+	})
+</script>
+</body>
+</html>
