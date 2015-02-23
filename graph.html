@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		* {padding:0; margin:0;}
+		
+		svg { width: 450px; height: 240px; border: 1px solid black; }
+    .line { fill: none; stroke: black; }
+
+	
+		
+	</style>
+</head>
+<body>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+
+	<svg id="myGraph"></svg>
+
+
+<script>
+var svgWidth = 450; // SVG 요소의 넓이
+var svgHeight = 240;  // SVG 요소의 높이
+var dataSet = [40, 115, 90, 160, 190, 40, 145, 110, 170, 190];  // 데이터셋
+var datas = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];  // 데이터셋
+
+
+var margin = svgWidth/(dataSet.length - 1); // 꺾은선 그래프의 간격 계산
+// 꺾은선 그래프의 좌표를 계산하는 메서드
+
+var line = d3.svg.line()  // svg의 선
+  .x(function(d, i){
+    return i * margin;  // X 좌표는 표시 순서×간격
+  })
+  .y(function(d, i){
+    return 240; // 데이터로부터 Y 좌표 빼기
+  })
+// 꺾은선 그래프 그리기
+var lineElements = d3.select("#myGraph")
+  .append("path") // 데이터 수만큼 path 요소가 추가됨
+  .attr("class", "line")  // CSS 클래스 지정  
+  .attr("d", line(datas)) //연속선 지정
+
+  line = d3.svg.line()  // svg의 선
+  .x(function(d, i){
+    return i * margin;  // X 좌표는 표시 순서×간격
+  })
+  .y(function(d, i){
+    return svgHeight - d; // 데이터로부터 Y 좌표 빼기
+  })
+  lineElements
+  .transition()
+  .duration(1000)
+  .attr("d", line(dataSet));
+
+
+// 산포도 그리기
+var circleElements = d3.select("#myGraph")
+  .selectAll("circle")
+  .data(dataSet)
+  .enter()
+  .append("circle") // 데이터의 개수만큼 circle 요소가 추가됨
+  .attr("class", "mark")  // CSS 클래스 지정
+
+  .attr("cx", function(d, i){
+    return i * margin;
+  })
+  .attr("cy", function(d, i){
+    return 240;  
+  })
+  .attr("r", 5)
+
+  .transition()
+  .duration(1000)
+
+  .attr("cx", function(d, i){
+    return i * margin;
+  })
+  .attr("cy", function(d, i){
+    return svgHeight-d;  
+  })
+  
+
+</script>
+</body>
+</html>
